@@ -46,7 +46,7 @@ public class Player : Character, IDestructible
         if (_health < 0)
             _health = 0;
 
-        _signalBus.Fire(new GameEvents.CharacterDamaged(this, damage));
+        _signalBus.Fire(new GameEvents.PlayerDamaged(this, damage));
     }
 
     public bool IsAllive() => _health > 0;

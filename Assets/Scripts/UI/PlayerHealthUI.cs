@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayerHealthUI : MonoBehaviour
+public class PlayerHealthUI : MonoBehaviour, IInitializable, IDisposable
 {
     public PlayerHealthBar healthBarTemplate;
 
     private SignalBus _signalBus;
     private Player[] _players;
-    private PlayerObjectsHandler _playerObjectsHandler;
+    private ActivePlayerHandler _playerObjectsHandler;
 
     private Dictionary<Player, PlayerHealthBar> _healthBars = new Dictionary<Player, PlayerHealthBar>();
 
@@ -18,21 +19,14 @@ public class PlayerHealthUI : MonoBehaviour
     }
 
     [Inject]
-    protected void Construct(SignalBus signalBus, Player[] players, PlayerObjectsHandler handler)
+    protected void Construct(SignalBus signalBus, Player[] players, ActivePlayerHandler handler)
     {
         _signalBus = signalBus;
         _players = players;
         _playerObjectsHandler = handler;
     }
 
-    private void Update()
-    {
-        var activeIndex = _playerObjectsHandler.GetActiveIndex();
-        for (int i = 0; i < _players.Length; i++)
-            _healthBars[_players[i]].activeBackground.enabled = activeIndex == i;
-    }
-
-    public void Start()
+    public void Initialize()
     {
         int index = 0;
         foreach (var player in _players)
@@ -40,18 +34,28 @@ public class PlayerHealthUI : MonoBehaviour
             _healthBars.Add(player, CreateHealthBar(player, index++));
             UpdateHealth(player);
         }
+        UpdateActiveHealthBar();
 
-        _signalBus.Subscribe<GameEvents.CharacterDamaged>(OnPlayerDamaged);
+        _signalBus.Subscribe<GameEvents.PlayerDamaged>(OnPlayerDamaged);
+        _signalBus.Subscribe<GameEvents.ActivePlayerChanged>(UpdateActiveHealthBar);
     }
 
-    public void OnDestroy()
+    public void Dispose()
     {
-        _signalBus.Unsubscribe<GameEvents.CharacterDamaged>(OnPlayerDamaged);
+        _signalBus.Unsubscribe<GameEvents.PlayerDamaged>(OnPlayerDamaged);
+        _signalBus.Unsubscribe<GameEvents.ActivePlayerChanged>(UpdateActiveHealthBar);
     }
 
-    private void OnPlayerDamaged(GameEvents.CharacterDamaged data)
+    private void OnPlayerDamaged(GameEvents.PlayerDamaged data)
     {
         UpdateHealth(data.player);
+    }
+
+    private void UpdateActiveHealthBar()
+    {
+        var activeIndex = _playerObjectsHandler.GetPlayerIndex();
+        for (int i = 0; i < _players.Length; i++)
+            _healthBars[_players[i]].activeBackground.enabled = activeIndex == i;
     }
 
     private void UpdateHealth(Player player)

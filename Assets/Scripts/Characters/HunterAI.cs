@@ -38,11 +38,11 @@ public class HunterAI : MonoBehaviour, IInput
         if (_escapeHandler.IsEscaped(enemy))
             return false;
 
-        var direction = enemy.GetPosition() - character.GetPosition();
-        if (direction.sqrMagnitude > viewRange * viewRange)
+        if (!Utils.InRange(enemy.GetPosition(), character.GetPosition(), viewRange))
             return false;
 
-        var dot = Vector3.Dot(transform.forward, direction.normalized);
+        var direction = enemy.GetPosition() - character.GetPosition();
+        var dot = Vector3.Dot(character.GetViewDirection(), direction.normalized);
         var angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
         return angle < viewAngle / 2;
     }
@@ -58,11 +58,14 @@ public class HunterAI : MonoBehaviour, IInput
 
     private void OnDrawGizmosSelected()
     {
+        if (character == null)
+            return;
+
         Gizmos.color = Color.yellow;
         var halfAngle = viewAngle / 2;
-        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, -halfAngle, 0) * transform.forward * viewRange);
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * viewRange);
-        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, halfAngle, 0) * transform.forward * viewRange);
+        Gizmos.DrawLine(character.GetPosition(), character.GetPosition() + Quaternion.Euler(0, -halfAngle, 0) * character.GetViewDirection() * viewRange);
+        Gizmos.DrawLine(character.GetPosition(), character.GetPosition() + transform.forward * viewRange);
+        Gizmos.DrawLine(character.GetPosition(), character.GetPosition() + Quaternion.Euler(0, halfAngle, 0) * character.GetViewDirection() * viewRange);
 
         if (target != null)
         {

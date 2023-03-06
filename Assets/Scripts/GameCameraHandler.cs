@@ -16,15 +16,15 @@ public class GameCameraHandler : IInitializable, IDisposable
 
     public void Initialize()
     {
-        _signalBus.Subscribe<PlayerObjectsHandler.ActiveObjectChanged>(OnActiveObjectChanged);
+        _signalBus.Subscribe<GameEvents.ActivePlayerChanged>(OnActiveObjectChanged);
     }
 
     public void Dispose()
     {
-        _signalBus.Unsubscribe<PlayerObjectsHandler.ActiveObjectChanged>(OnActiveObjectChanged);
+        _signalBus.Unsubscribe<GameEvents.ActivePlayerChanged>(OnActiveObjectChanged);
     }
 
-    private void OnActiveObjectChanged(PlayerObjectsHandler.ActiveObjectChanged data)
+    private void OnActiveObjectChanged(GameEvents.ActivePlayerChanged data)
     {
         var player = _players[data.index];
         _camera.target = player.transform;

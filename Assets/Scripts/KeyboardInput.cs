@@ -3,10 +3,10 @@ using Zenject;
 
 public class KeyboardInput : IInput, ITickable
 {
-    private PlayerObjectsHandler _handler;
+    private ActivePlayerHandler _handler;
 
     [Inject]
-    protected void Construct(PlayerObjectsHandler handler)
+    protected void Construct(ActivePlayerHandler handler)
     {
         _handler = handler;
     }
@@ -20,6 +20,6 @@ public class KeyboardInput : IInput, ITickable
     public void Tick()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
-            _handler.SelectAvailablePlayer();
+            _handler.SelectNextAvailablePlayer();
     }
 }

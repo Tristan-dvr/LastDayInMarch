@@ -25,7 +25,6 @@ public class GamePauseHandler : IInitializable, IDisposable
 
     private void OnGamePause(GameEvents.Pause data)
     {
-        Debug.Log($"Pause {data.pause}");
         Time.timeScale = data.pause ? 0 : 1;
         Paused = data.pause;
     }

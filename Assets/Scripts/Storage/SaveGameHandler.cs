@@ -46,9 +46,12 @@ public class SaveGameHandler
     private void CreateMetadata(int slot)
     {
         var currentMetadata = _storage.GetMetadata(slot) ?? new GameStateMetadata();
+
         var state = _storage.GetState();
         currentMetadata.level = state.level;
         currentMetadata.playtime = Time.realtimeSinceStartup;
+
+        _storage.SetMetadata(slot, currentMetadata);
     }
 
     public GameStateMetadata GetMetadata(int slot) => _storage.GetMetadata(slot);

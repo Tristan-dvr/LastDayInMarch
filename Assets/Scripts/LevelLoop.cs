@@ -18,13 +18,13 @@ public class LevelLoop : IInitializable, IDisposable
     public void Initialize()
     {
         _signalBus.Subscribe<GameEvents.PlayerEscaped>(OnPlayerEscaped);
-        _signalBus.Subscribe<GameEvents.CharacterDamaged>(OnPlayerDamaged);
+        _signalBus.Subscribe<GameEvents.PlayerDamaged>(OnPlayerDamaged);
     }
 
     public void Dispose()
     {
         _signalBus.Unsubscribe<GameEvents.PlayerEscaped>(OnPlayerEscaped);
-        _signalBus.Unsubscribe<GameEvents.CharacterDamaged>(OnPlayerDamaged);
+        _signalBus.Unsubscribe<GameEvents.PlayerDamaged>(OnPlayerDamaged);
     }
 
     private void OnPlayerDamaged()

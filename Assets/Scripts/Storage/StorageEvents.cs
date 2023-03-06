@@ -4,16 +4,16 @@ public class StorageEvents : Installer
 {
     public override void InstallBindings()
     {
-        Container.DeclareSignal<LoadSignal>();
+        Container.DeclareSignal<LoadFromSlot>();
         Container.DeclareSignal<GameSaved>().OptionalSubscriber();
         Container.DeclareSignal<GameLoaded>().OptionalSubscriber();
     }
 
-    public struct LoadSignal
+    public struct LoadFromSlot
     {
         public int slot;
 
-        public LoadSignal(int slot)
+        public LoadFromSlot(int slot)
         {
             this.slot = slot;
         }

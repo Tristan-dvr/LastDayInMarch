@@ -41,4 +41,6 @@ public abstract class Character : MonoBehaviour, ICharacter
     }
 
     protected IInput GetInput() => _input;
+
+    public Vector3 GetViewDirection() => transform.forward;
 }

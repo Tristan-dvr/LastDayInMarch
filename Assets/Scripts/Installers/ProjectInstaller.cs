@@ -6,7 +6,6 @@ public class ProjectInstaller : MonoInstaller
     {
         SignalBusInstaller.Install(Container);
         Container.Install<GameEvents>();
-        Container.DeclareSignal<PlayerObjectsHandler.ActiveObjectChanged>();
 
         Container.Install<StorageEvents>();
         Container.Bind<IStorage>().To<PlayerPrefsStorage>().AsCached();

@@ -2,11 +2,6 @@
 
 public static class Utils
 {
-    public static bool IsMaskContainsLayer(LayerMask mask, int layer)
-    {
-        return (mask.value & (1 << layer)) != 0;
-    }
-
     public static bool IsEnemy(ICharacter character1, ICharacter character2)
     {
         return character1.GetFaction() != character2.GetFaction();

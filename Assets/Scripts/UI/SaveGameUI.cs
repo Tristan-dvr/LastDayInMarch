@@ -47,7 +47,7 @@ public class SaveGameUI : MonoBehaviour, IInitializable, IDisposable
             slot.load.onClick.AddListener(() =>
             {
                 _signalBus.Fire(new GameEvents.Pause(false));
-                _signalBus.Fire(new StorageEvents.LoadSignal(index));
+                _signalBus.Fire(new StorageEvents.LoadFromSlot(index));
             });
             slot.gameObject.SetActive(true);
             _slots.Add(slot);

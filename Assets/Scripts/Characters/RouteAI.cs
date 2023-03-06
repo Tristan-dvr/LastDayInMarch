@@ -2,7 +2,7 @@
 
 public class RouteAI : MonoBehaviour, IInput
 {
-    const float DistanceThreshold = 0.2f;
+    private const float DistanceThreshold = 0.2f;
 
     public Character character;
     public Route route;
@@ -21,8 +21,7 @@ public class RouteAI : MonoBehaviour, IInput
         if (route == null)
             return;
 
-        var distance = (_next.position - character.GetPosition()).sqrMagnitude;
-        if (distance < DistanceThreshold)
+        if (Utils.InRange(_next.position, character.GetPosition(), DistanceThreshold))
         {
             _nextIndex = (_nextIndex + 1) % route.route.Length;
             _next = route.route[_nextIndex];

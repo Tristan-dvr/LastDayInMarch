@@ -13,9 +13,11 @@ public class EscapePoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.attachedRigidbody != null && other.attachedRigidbody.TryGetComponent<IControllable>(out var controllable))
+        if (other.attachedRigidbody != null 
+            && other.attachedRigidbody.TryGetComponent<ICharacter>(out var character)
+            && character.GetFaction() == Faction.Player)
         {
-            _signalBus.Fire(new GameEvents.PlayerEscaped(controllable));
+            _signalBus.Fire(new GameEvents.PlayerEscaped(character));
         }
     }
 }

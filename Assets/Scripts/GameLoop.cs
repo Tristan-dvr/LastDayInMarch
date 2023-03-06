@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -35,16 +34,16 @@ public class GameLoop : IInitializable, IDisposable
         LoadCurrentlevel();
 
         _signalBus.Subscribe<GameEvents.LevelFinished>(OnLevelFinished);
-        _signalBus.Subscribe<StorageEvents.LoadSignal>(ReloadAndStartLevel);
+        _signalBus.Subscribe<StorageEvents.LoadFromSlot>(ReloadAndStartLevel);
     }
 
     public void Dispose()
     {
         _signalBus.Unsubscribe<GameEvents.LevelFinished>(OnLevelFinished);
-        _signalBus.Unsubscribe<StorageEvents.LoadSignal>(ReloadAndStartLevel);
+        _signalBus.Unsubscribe<StorageEvents.LoadFromSlot>(ReloadAndStartLevel);
     }
 
-    private async void ReloadAndStartLevel(StorageEvents.LoadSignal data)
+    private async void ReloadAndStartLevel(StorageEvents.LoadFromSlot data)
     {
         await _storage.LoadFromSlot(data.slot);
         LoadCurrentlevel();
