@@ -1129,6 +1129,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 218734818566666239}
     m_Modifications:
+    - target: {fileID: 2804039357150461441, guid: 1ffae26f8caba124284e942dcc73b560, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8204259444004322023, guid: 1ffae26f8caba124284e942dcc73b560, type: 3}
       propertyPath: m_Name
       value: Hunter
