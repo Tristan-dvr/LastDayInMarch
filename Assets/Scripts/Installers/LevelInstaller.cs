@@ -1,7 +1,18 @@
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 public class LevelInstaller : MonoInstaller
 {
+    [Inject]
+    protected void Construct([Inject(Id = typeof(Bullet))] AssetReference bulletAsset)
+    {
+        Container.BindFactory<Bullet, Bullet.Factory>()
+            .FromPoolableMemoryPool<Bullet, Bullet.Pool>(bind => bind
+                .WithInitialSize(5)
+                .FromComponentInNewPrefab(bulletAsset.Asset)
+                .UnderTransformGroup("Bullets"));
+    }
+
     public override void InstallBindings()
     {
         Container.BindInterfacesTo<KeyboardInput>().AsCached().IfNotBound();

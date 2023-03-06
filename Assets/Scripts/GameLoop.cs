@@ -8,9 +8,7 @@ public class GameLoop : IInitializable, IDisposable
 {
     private SaveGameHandler _storage;
     private LevelAssetsHandler _assetsHandler;
-    private DiContainer _container;
     private SignalBus _signalBus;
-    private AssetReference _bulletAsset;
     private ZenjectSceneLoader _sceneLoader;
     private CoroutineHost _host;
 
@@ -18,18 +16,14 @@ public class GameLoop : IInitializable, IDisposable
 
     public GameLoop(
         SaveGameHandler storage,
-        DiContainer container,
         SignalBus signalBus,
         LevelAssetsHandler assetsHandler,
-        [Inject(Id = typeof(Bullet))] AssetReference bulletAsset, 
         ZenjectSceneLoader sceneLoader, 
         CoroutineHost host)
     {
         _storage = storage;
-        _container = container;
         _signalBus = signalBus;
         _assetsHandler = assetsHandler;
-        _bulletAsset = bulletAsset;
         _sceneLoader = sceneLoader;
         _host = host;
     }
@@ -37,14 +31,6 @@ public class GameLoop : IInitializable, IDisposable
     public async void Initialize()
     {
         await _assetsHandler.LoadAssetsAsync();
-
-        //  TODO:   move to level installer
-        _container.BindFactory<Bullet, Bullet.Factory>()
-            .FromPoolableMemoryPool<Bullet, Bullet.Pool>(bind => bind
-                .WithInitialSize(5)
-                .FromComponentInNewPrefab(_bulletAsset.Asset)
-                .UnderTransformGroup("Bullets"));
-
         await _storage.LoadDefault(1);
         LoadCurrentlevel();
 
