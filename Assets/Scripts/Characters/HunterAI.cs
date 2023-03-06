@@ -11,11 +11,13 @@ public class HunterAI : MonoBehaviour, IInput
 
     private ICharacter target;
     private List<ICharacter> _characters;
+    private PlayerEscapeHandler _escapeHandler;
 
     [Inject]
-    protected void Construct(ICharacter[] characters)
+    protected void Construct(ICharacter[] characters, PlayerEscapeHandler escapeHandler)
     {
         _characters = characters.Where(c => Utils.IsEnemy(c, character)).ToList();
+        _escapeHandler = escapeHandler;
     }
 
     private void Start()
@@ -25,14 +27,17 @@ public class HunterAI : MonoBehaviour, IInput
 
     private void FixedUpdate()
     {
-        if (target != null)
+        if (target != null && !_escapeHandler.IsEscaped(target))
             return;
 
-        target = _characters.FirstOrDefault(IsInViewRange);
+        target = _characters.FirstOrDefault(IsReachable);
     }
 
-    private bool IsInViewRange(ICharacter enemy)
+    private bool IsReachable(ICharacter enemy)
     {
+        if (_escapeHandler.IsEscaped(enemy))
+            return false;
+
         var direction = enemy.GetPosition() - character.GetPosition();
         if (direction.sqrMagnitude > viewRange * viewRange)
             return false;
