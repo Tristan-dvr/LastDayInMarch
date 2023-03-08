@@ -18,7 +18,6 @@ public class LevelInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-
         Container.BindInterfacesAndSelfTo<GamePauseHandler>().AsCached();
         Container.BindExecutionOrder<GamePauseHandler>(int.MinValue);
 

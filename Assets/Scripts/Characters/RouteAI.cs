@@ -18,9 +18,6 @@ public class RouteAI : MonoBehaviour, IInput
 
     private void Update()
     {
-        if (route == null)
-            return;
-
         if (Utils.InRange(_next.position, character.GetPosition(), DistanceThreshold))
         {
             _nextIndex = (_nextIndex + 1) % route.route.Length;

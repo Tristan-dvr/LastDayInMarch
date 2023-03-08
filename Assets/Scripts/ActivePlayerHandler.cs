@@ -25,25 +25,25 @@ public class ActivePlayerHandler : IInitializable, IDisposable
 
     public void Initialize()
     {
-        SetActiveObject(0);
+        SetActivePlayer(0);
         _signalBus.Subscribe<GameEvents.PlayerEscaped>(SelectNextAvailablePlayer);
-        _signalBus.Subscribe<GameEvents.LevelFinished>(OnMatchFinished);
+        _signalBus.Subscribe<GameEvents.LevelFinished>(OnLevelFinished);
     }
 
     public void Dispose()
     {
         _signalBus.Unsubscribe<GameEvents.PlayerEscaped>(SelectNextAvailablePlayer);
-        _signalBus.Unsubscribe<GameEvents.LevelFinished>(OnMatchFinished);
+        _signalBus.Unsubscribe<GameEvents.LevelFinished>(OnLevelFinished);
     }
 
     public void TrySelectPlayer(int index)
     {
         if (_escapeHandler.IsEscaped(_players[index]))
             return;
-        SetActiveObject(index);
+        SetActivePlayer(index);
     }
 
-    private void OnMatchFinished()
+    private void OnLevelFinished()
     {
         foreach (var p in _players)
             p.SetInput(null);
@@ -60,10 +60,10 @@ public class ActivePlayerHandler : IInitializable, IDisposable
             index = (index + 1) % _players.Length;
         }
         while (_escapeHandler.IsEscaped(_players[index]));
-        SetActiveObject(index);
+        SetActivePlayer(index);
     }
 
-    private void SetActiveObject(int index)
+    private void SetActivePlayer(int index)
     {
         _index = index;
         for (int i = 0; i < _players.Length; i++)

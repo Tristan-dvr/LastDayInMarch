@@ -22,7 +22,7 @@ public abstract class Character : MonoBehaviour, ICharacter
 
         var movement = GetInput().GetMovement();
         var movementVector = new Vector3(movement.x, 0, movement.y);
-        _body.velocity = new Vector3(movement.x, 0, movement.y) * speed;
+        _body.velocity = movementVector * speed;
 
         if (movementVector.sqrMagnitude > 0.01f)
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movementVector), Time.fixedDeltaTime * speed * 5);
